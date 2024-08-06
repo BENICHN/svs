@@ -4,7 +4,7 @@ import { launch } from 'puppeteer'
 
 let argv = process.argv.slice(2)
 if (argv.length < 2) {
-    console.log("usage: node svs.js <url> <output_path> [selector_to_hide=''] [pages_delay=2000] [first_page_delay=3000]")
+    console.log("usage: node svs.js <url> <output_path> [selector_to_hide=''] [pages_delay=2000] [first_delay=2000]")
     process.exit(0)
 }
 let dir = path.dirname(process.argv[1])
@@ -13,7 +13,7 @@ let url = argv[0]
 let dest = argv[1]
 let selectorToHide = argv.length >= 3 ? argv[2] : ''
 let pagesDelay = argv.length >= 4 ? argv[3] : 2000
-let firstPageDelay = argv.length >= 5 ? argv[4] : 3000
+let firstDelay = argv.length >= 5 ? argv[4] : 2000
 console.log(`opening browser ...`)
 const browser = await launch({ headless: false, args: ['--no-sandbox'], protocolTimeout: 999999999 })
 let page = await browser.newPage();
@@ -33,15 +33,16 @@ if (selectorToHide.length > 0) {
     await page.addStyleTag({ content: c })
     console.log(`added style tag ${c}`)
 }
-let [elems, szs] = await page.$eval('#page-container', async (pc, firstPageDelay, pagesDelay) => {
+let [elems, szs] = await page.$eval('#page-container', async (pc, firstDelay, pagesDelay) => {
     let szs = []
     let elems = []
+    await new Promise(r => setTimeout(r, firstDelay));
     let n = pc.children.length
     for (let i = 0; i < n; i++) {
         let el = pc.children[i]
         if (el.classList.contains('pf')) {
             el.scrollIntoView()
-            await new Promise(r => setTimeout(r, i == 0 ? firstPageDelay : pagesDelay));
+            await new Promise(r => setTimeout(r, pagesDelay));
             el = pc.children[i]
             elems.push(el.innerHTML)
             szs.push({
@@ -51,7 +52,7 @@ let [elems, szs] = await page.$eval('#page-container', async (pc, firstPageDelay
         }
     }
     return [elems, szs]
-}, firstPageDelay, pagesDelay)
+}, firstDelay, pagesDelay)
 let n = elems.length
 let z = n.toString().length
 console.log(`collected ${n} pages`)

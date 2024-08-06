@@ -11,7 +11,7 @@ outils pour scrapper scholarvox
   - `output_path` : le dossier où les pages seront sauvegardées
   - `selector_to_hide` : sélecteur css vers les élément qu'on souhaiterais cacher dans les pages
   - `pages_delay` : délai entre la collecte de deux pages
-  - `first_page_delay` : délai avant la collecte de la première page
+  - `first_delay` : délai avant de déterminer le nombre de pages à collecter
 - lancer `pdfunite page*.pdf nom_de_fichier.pdf` dans le dossier où sont sauvegardées les pages
 - lancer `crop.py` via `python` pour découper les pages, l'usage y est décrit :
   - `pdf_file` : chemin vers le pdf multipages
