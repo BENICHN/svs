@@ -4,7 +4,7 @@ outils pour scrapper scholarvox
 
 ## Procédure
 
-- remplis `vars.json` avec les champs `pscope`, `username`, `password`
+- remplir `vars.json` avec les champs `pscope`, `username`, `password`
 - trouver l'url d'un livre, elle se termine par `.../reader/docid/...`
 - lancer `svs.js` via `node` pour collecter les pages, l'usage y est décrit :
   - `url` : l'url ci-dessus
